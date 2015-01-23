@@ -30,8 +30,9 @@ This section will describe the specific tasks that users should be able to accom
 - Player
 
   - Each player has a name 
-  - Each player has an IP address
+  - There will be several formation options for the users to choose form.
   - Each player also has a score
+  - Each player can choose a profile picture.
 
 - Puck
 
@@ -51,4 +52,21 @@ This section will describe the specific tasks that users should be able to accom
 
 
 ### Views/Controls
+- Ingame View:
+  - image of a soccer field as background.
+  - The Pucks will be positioned over the soccer field.  
+  - Top:
+    - Names, scores and player profile pictures
+    - Times underneath the profile pictures on both sides indicating the time have left
+- Main Menu:
+  - Play button which leads to add players view
+  - Credit button which leads to the credit view
+- Add Players view:
+  - It identifies each player where the users can:
+    - type the names
+    - choose the profile pictures
+    - choose the formation
+  - Go BACK button
+  - START button
+  
 

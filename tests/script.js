@@ -5,18 +5,7 @@ function createCanvas(w, h){
    return c;
 }
 
-(function(){
-   var canv = document.body.appendChild(createCanvas(800, 500));
-   var c = canv.getContext('2d'),
-   gravity = 0,
-   dampening = 0.92,
-   pullStrength = 0.01,
-   circles = [],
-   numCircles = 10,
-   repulsion = 0.2,
-   mouseDown = false,
-   mouseX, mouseY;
-
+function setupFrameLoop(){
    // shim layer with setTimeout fallback
    window.requestAnimFrame = (function(){
       return window.requestAnimationFrame ||
@@ -28,6 +17,21 @@ function createCanvas(w, h){
             window.setTimeout(callback, 1000 / 60);
          };
    })();
+}
+
+(function(){
+   var canv = document.body.appendChild(createCanvas(800, 480));
+   var c = canv.getContext('2d'),
+   gravity = 0,
+   dampening = 0.92,
+   pullStrength = 0.01,
+   circles = [],
+   numCircles = 10,
+   repulsion = 0.2,
+   mouseDown = false,
+   mouseX, mouseY;
+
+   setupFrameLoop();
 
    var background = new Image();
    background.src = "https://mdn.mozillademos.org/files/5397/rhino.jpg";

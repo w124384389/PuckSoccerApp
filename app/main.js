@@ -7,8 +7,8 @@ require.config({
    baseUrl: "app",
    // This way one can call on jquery and libs directly
    paths: {
-      "lib": "../lib",
-      "jquery": "../lib/jquery"
+      lib: "../lib",
+      jquery: "../lib/jquery"
       // or the following to load remotely:
       // "jquery": "https://code.jquery.com/jquery-2.1.3.min"
    },
@@ -16,8 +16,7 @@ require.config({
 });
 
 // All other modules should be called through here
-require(["jquery", "structures/mixin", "structures"],
-function($, mixin, structures) {
+require(["jquery", "structures/mixin", "structures"], function ($, mixin, structures) {
    // mixin
    $(function() {
       console.log("Page loaded!");

@@ -34,7 +34,8 @@ function setupFrameLoop(){
    setupFrameLoop();
 
    var background = new Image();
-   background.src = "https://mdn.mozillademos.org/files/5397/rhino.jpg";
+   //background.src = "https://mdn.mozillademos.org/files/5397/rhino.jpg";
+   background.src = "backGame.jpg";
    
    function initializeCircles(){
       // Initialize the array of circle objects

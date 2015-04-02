@@ -1,48 +1,58 @@
-define(["settings"], function (Settings) {
-	return (function () {
-		var canvas, el;
+define(function () {
+	var myNavigation, canvas, el;
 
-		function makeNewInterface() {
-			return Object.create(proto);
+	function makeNewInterface() {
+		if (myNavigation == null) {
+			myNavigation = Object.create(proto);
 		}
+		return myNavigation;
+	}
 
-		function newButton (str) {
-			return $('<input>').attr('type', 'button').attr('value', str);
+	function newButton (str) {
+		return $('<input>').attr('type', 'button').attr('value', str);
+	}
+
+	var proto = {
+		setup: function ($, Settings) {
+			canvas = document.getElementById("canvas");
+			canvas.width = Settings.gameWidth;
+			canvas.height = Settings.gameHeight;
+			el = $("#main canvas");
+			//console.log($);
+			var b = newButton("New Game");
+			b.insertAfter(el);
+			return true;
+		},
+		get2DContext: function () {
+			return canvas.getContext("2d");
+		},
+		drawObject: function (obj) {
+			c.beginPath();
+			c.arc(circle.x, circle.y, circle.radius,
+			0, 2*Math.PI);
+			c.closePath();
 		}
+	};
 
-		proto = {
-			setup: function($) {
-				canvas = document.getElementById("canvas");
-				canvas.width = Settings.gameWidth;
-				canvas.height = Settings.gameHeight;
-				el = $("#main canvas");
-				console.log($);
-				var b = newButton("New Game");
-				b.insertAfter(el);
-			}
-		};
+	return makeNewInterface();
 
-		/*
+	/*
 
-		function newButton: function (str) {
-			return $('<input>').attr('type', 'button').attr('value', str);
+	function newButton: function (str) {
+		return $('<input>').attr('type', 'button').attr('value', str);
+	}
+
+	proto = {
+		setup: function ($) {
+			console.log("foi");
+			canvas = document.getElementById("canvas");
+			canvas.width = Settings.gameWidth;
+			canvas.height = Settings.gameHeight;
+			el = $("#main canvas");
+			console.log(el);
+			var b = newButton("New Game");
+			b.insertAfter(el);
+			console.log(b);
 		}
-
-		proto = {
-			setup: function ($) {
-				console.log("foi");
-				canvas = document.getElementById("canvas");
-				canvas.width = Settings.gameWidth;
-				canvas.height = Settings.gameHeight;
-				el = $("#main canvas");
-				console.log(el);
-				var b = newButton("New Game");
-				b.insertAfter(el);
-				console.log(b);
-			}
-		};
-
-		return makeNewInterface();*/
-		return makeNewInterface();
-	})();
+	};*/
 });

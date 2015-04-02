@@ -7,14 +7,17 @@ requirejs.config({
 	waitSeconds: 15
 });
 
-requirejs(["jquery", "game"], function ($, Game) {
+requirejs(["game", "jquery", "navigation", "settings"], function (Game, $, Navigation, Settings) {
 	$(function() {
-		console.log("Page loaded!");
-		if (Game.init($)) {
+		var loaded = Navigation.setup($, Settings);
+		console.log("Navigation setup" + (loaded ? " " : "NOT ") + "initialized.");
+		
+		loaded = Game.init(Navigation.get2DContext());
+		if (loaded) {
 			console.log("Game initialized.");
 			Game.start();
 		} else {
-			alert("Problem initializing game.");
+			alert("Game NOT initialized.");
 		}
 	});
 });

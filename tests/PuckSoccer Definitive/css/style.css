@@ -6,8 +6,6 @@ body {
 	width: 600px;
 	height: 360px;
 	position: absolute;
-	top: 5px;
-	left: 5px;
 }
 
 .button {
@@ -31,12 +29,21 @@ body {
 	background: linear-gradient(#EB7723 50%, #A80000 50%);
 }
 
-canvas {
+#canvas {
 	position: absolute;
 	top: 0; 
 	left: 0; 
 	border: 1px solid black; 
 	z-index: 1;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box; 
+	box-sizing: border-box;
+}
+
+#game_field {
+	position: absolute;
+	border: 1px solid black; 
+	z-index: 2;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box; 
 	box-sizing: border-box;

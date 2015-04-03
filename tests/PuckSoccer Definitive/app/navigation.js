@@ -1,5 +1,5 @@
 define(function () {
-	var myNavigation, canvas, el;
+	var myNavigation, canvas, el, canvasGameField;
 
 	function makeNewInterface() {
 		if (myNavigation == null) {
@@ -17,14 +17,19 @@ define(function () {
 			canvas = document.getElementById("canvas");
 			canvas.width = Settings.gameWidth;
 			canvas.height = Settings.gameHeight;
+
+			canvasGameField = document.getElementById("game_field");
+			canvasGameField.width = Settings.fieldWidth;
+			canvasGameField.height = Settings.fieldHeight;
+
 			el = $("#main canvas");
-			//console.log($);
+			/*
 			var b = newButton("New Game");
-			b.insertAfter(el);
+			b.insertAfter(el);*/
 			return true;
 		},
-		get2DContext: function () {
-			return canvas.getContext("2d");
+		getGameFieldCanvas: function () {
+			return canvasGameField;
 		}
 	};
 

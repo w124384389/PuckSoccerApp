@@ -1,23 +1,20 @@
 define(["vector2", "settings"], function (Vector2, Settings) {
 
-	function makeNewPuck (x, y) {
+	function makeNewPuck (id) {
 		var puck = Object.create(proto);
-
-		puck.sprite = document.createElement("img");
-		//puck.sprite = new Image(100, 100);
-		puck.sprite.src = "puck.png";
-		console.log(puck.sprite);
-		puck.position = Vector2.new(x, y);
+		puck.id = id;
+		puck.sprite = new Image();
+		puck.sprite.src = "app/img/" + (id >= 5 ? "puck_red.png" : "puck_blue.png");
+		puck.position = Vector2.new();
 		puck.velocity = Vector2.new();
-
-		puck.radius = 20;
+		puck.radius = Settings.puckRadius * 0.5;
 
 		return puck;
 	}
 
 	var proto = {
 		draw: function (context) {
-			context.drawImage(this.sprite, this.position.x, this.position.y);
+			context.drawImage(this.sprite, this.position.x, this.position.y, Settings.puckRadius, Settings.puckRadius);
 			context.fill();
 		},
 		move: function (deltaTime) {
@@ -30,44 +27,37 @@ define(["vector2", "settings"], function (Vector2, Settings) {
 			this.velocity.x *= Settings.dampening;
 		},
 		collide: function (other) {
-			// (dx, dy) distance in x and y
-			var dx = other.position.x - this.position.x,
-				dy = other.position.y - this.position.y,
-			// d = distance from `a` to `b`
-				d = Math.sqrt(dx*dx + dy*dy),
-			// (ux, uy) = unit vector, in the a -> b direction
-				ux = dx / d,
-				uy = dy / d;
+			// distance from `a` to `b`
+			var d = Vector2.new(other.position.x - this.position.x, other.position.y - this.position.y),
+				u = Vector2.new(d.x, d.y).divideMe(d.magnitude());
 
 			// If the balls are on top of one another,
-			if (d < this.radius + other.radius) {
+			if (d.magnitude() < this.radius + other.radius) {
 				// then execute a repulsive force to
 				// push them apart, which resembles collision.
-				this.velocity.x -= ux * Settings.repulsion;
-				this.velocity.y -= uy * Settings.repulsion;
-				other.velocity.x += ux * Settings.repulsion;
-				other.velocity.y += uy * Settings.repulsion;
+				this.velocity.plusMe(u.multiplyMe(-Settings.repulsion * (d.magnitude() > Settings.puckRadius - 0.2 ? 0.6 : 1)));
+				other.velocity.plusMe(u.multiplyMe(-1));
 			}
 		},
 		bounce: function () {
 			// bottom
-			if(this.position.y + this.radius > Settings.fieldHeight){
-				this.position.y = Settings.fieldHeight - this.radius;
+			if(Settings.fieldHeight - 20 < this.position.y + this.radius){
+				this.position.y = Settings.fieldHeight - this.radius - 20;
 				this.velocity.y = -Math.abs(this.velocity.y);
 			}
 			// right
-			if(this.position.x + this.radius > Settings.fieldWidth){
-				this.position.x = Settings.fieldWidth - this.radius;
+			if(Settings.fieldWidth - 25 < this.position.x + this.radius){
+				this.position.x = Settings.fieldWidth - this.radius - 25;
 				this.velocity.x = -Math.abs(this.velocity.x);
 			}
 			// top
-			if(this.position.y - this.radius < 0){
-				this.position.y = this.radius;
+			if(-25 > this.position.y - this.radius){
+				this.position.y = this.radius - 25;
 				this.velocity.y = Math.abs(this.velocity.y);
 			}
 			// left
-			if(this.position.x - this.radius < 0){
-				this.position.x = this.radius;
+			if(-30 > this.position.x - this.radius){
+				this.position.x = this.radius-30;
 				this.velocity.x = Math.abs(this.velocity.x);
 			}
 		}

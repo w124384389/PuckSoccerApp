@@ -1,4 +1,4 @@
-define(["match", "settings"], function (Match, Settings) {
+define(["match", "settings", "navigation"], function (Match, Settings, Navigation) {
 	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch, context;
 
 	function makeNewGame() {
@@ -27,8 +27,8 @@ define(["match", "settings"], function (Match, Settings) {
 		
 		myGame.draw();
 	}
-
-	function assetLoader () {
+	
+	function assetLoader () {		
 		console.log("Assets loading...");
 		return true;
 	}
@@ -70,11 +70,11 @@ define(["match", "settings"], function (Match, Settings) {
 		},
 		draw: function () {
 			// Clean screen
-			context.clearRect(0, 0, Settings.gameWidth, Settings.gameHeight);
-
+			//context.clearRect(0, 0, Settings.gameWidth, Settings.gameHeight);
+			//Navigation.drawBackground();
 			// Draw pucks
 			for (var i = 0; i < myMatch.pucks.length; i += 1) {
-				myMatch.pucks[i].draw(context);
+				//myMatch.pucks[i].draw(context);
 				/*
 				context.beginPath();
 				context.arc(myMatch.pucks[i].position.x, myMatch.pucks[i].position.y, myMatch.pucks[i].radius, 0, 2*Math.PI);
@@ -84,6 +84,10 @@ define(["match", "settings"], function (Match, Settings) {
 			}
 			
 			//console.log("Drawing...");
+		},
+		drawBackground: function () {
+			//console.log(background);
+			context.drawImage(background, 0, 0);
 		}
 	};
 	return makeNewGame();		

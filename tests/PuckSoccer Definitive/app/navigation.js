@@ -25,12 +25,6 @@ define(function () {
 		},
 		get2DContext: function () {
 			return canvas.getContext("2d");
-		},
-		drawObject: function (obj) {
-			c.beginPath();
-			c.arc(circle.x, circle.y, circle.radius,
-			0, 2*Math.PI);
-			c.closePath();
 		}
 	};
 

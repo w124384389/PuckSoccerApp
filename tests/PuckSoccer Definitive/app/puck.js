@@ -1,9 +1,12 @@
 define(["vector2", "settings"], function (Vector2, Settings) {
+
 	function makeNewPuck (x, y) {
 		var puck = Object.create(proto);
 
-		puck.sprite = new Image();
+		puck.sprite = document.createElement("img");
+		//puck.sprite = new Image(100, 100);
 		puck.sprite.src = "puck.png";
+		console.log(puck.sprite);
 		puck.position = Vector2.new(x, y);
 		puck.velocity = Vector2.new();
 
@@ -14,7 +17,8 @@ define(["vector2", "settings"], function (Vector2, Settings) {
 
 	var proto = {
 		draw: function (context) {
-			context.drawImage(this.position.x, this.position.y);
+			context.drawImage(this.sprite, this.position.x, this.position.y);
+			context.fill();
 		},
 		move: function (deltaTime) {
 			// Increment location by velocity

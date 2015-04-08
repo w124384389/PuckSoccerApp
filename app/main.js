@@ -1,17 +1,25 @@
-// For any third party dependencies, like jQuery, place them in the lib folder.
-
-// Configure loading modules from the lib directory,
-// except for 'app' ones, which are in a sibling
-// directory.
 requirejs.config({
-    baseUrl: 'lib',
-    paths: {
-        app: '../app'
-    }
+    //baseUrl: "app",
+	waitSeconds: 45,
+	paths: {
+		jquery: "../lib/jquery-2.1.3.min",
+		lib: "../lib",
+	}
 });
 
-// Start loading the main app file. Put all of
-// your application logic in there.
-requirejs([], function () {
-	console.log("Loaded main menu");
+requirejs(["game", "jquery", "navigation", "settings"], function (Game, $, Navigation, Settings) {
+	
+	$(function() {		
+		var loaded = Navigation.setup($, Settings);
+		console.log("Navigation setup" + (loaded ? " " : "NOT ") + "initialized.");
+		
+		loaded = Game.init(Navigation.getGameFieldCanvas());
+		if (loaded) {
+			alert("Game initialized.");
+			Game.start();
+		} else {
+			alert("Game NOT initialized.");
+		}
+	});
 });
+

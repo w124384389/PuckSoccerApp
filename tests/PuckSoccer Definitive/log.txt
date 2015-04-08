@@ -1,3 +1,0 @@
-- loading image for the puck.
-- to generate ramdom numbers between a range:
-		Math.floor(Math.random() * (400 - 5)) + 5

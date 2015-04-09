@@ -1,5 +1,5 @@
-define(function () {
-	var myNavigation, canvas, el, canvasGameField;
+define(["asset_loader", "settings"], function (AssetLoader, Settings) {
+	var myNavigation, canvas, el, canvasGameField, fieldContext, context;
 
 	function makeNewInterface() {
 		if (myNavigation == null) {
@@ -23,20 +23,20 @@ define(function () {
 			canvasGameField.height = Settings.fieldHeight;
 
 			el = $("canvas");
+			context = canvas.getContext("2d");
+			fieldContext = canvasGameField.getContext("2d");
 
 			// Setup button clicks
-			console.log($(".play").click());
+			//console.log($(".play").click());
 			/*
 			$(".play").click(function() {
 				//$('#main').hide();
 				console.log("f");
 			});*/
 
-			this.mainMenu();
-
-			/*
+			///*
 			var b = newButton("New Game");
-			b.insertAfter(el);*/
+			b.insertAfter(el);//*/
 			return true;
 		},
 		getGameFieldCanvas: function () {
@@ -47,6 +47,12 @@ define(function () {
 			//$('#main').show();
 			$('#main').hide();
 			//$('#game_field').hide();
+		},
+		ingameMenu: function () {
+			context.drawImage(AssetLoader.imgs["menu_bg"], 0, 0, Settings.gameWidth, Settings.gameHeight);
+		},
+		getContext: function () {
+			return fieldContext;
 		}
 	};
 

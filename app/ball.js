@@ -1,31 +1,49 @@
-define (["puck", "settings", "vector2"], function (Puck, Settings, Vector2) {
+define (["puck", "settings", "vector2", "game"], function (Puck, Settings, Vector2) {
 	
+	var potentialGoal = 0;
+
 	function makeNewBall (id) {
-		var myBall = Object.create(Puck.new(id), {
-			move: function (deltaTime) {
-				console.log(this.id);
-			}
-		});
-		myBall.move(3);
-		/*
-		myBall.move = function (deltaTime) {
+		function superC () {};
+		superC.prototype = Object.create(Puck.new(id));
+		// 0: no goal
+		// 1: player one
+		// 2: player two
+		superC.prototype.goal = 0;
+		superC.prototype.move = function (deltaTime) {
 			// Increment location by velocity
 			this.position.plusMe(this.velocity);
+			
+			potentialGoal = 0;
 
-			// Bounce on field limits
-			if (this.getCenterX() >= Settings.fieldWidth-this.radius && this.velocity.x > 0) this.velocity.x = -this.velocity.x;
-			if (this.getCenterX() <= this.radius && this.velocity.x < 0) this.velocity.x = -this.velocity.x;
-			if (this.getCenterY() >= Settings.fieldHeight-this.radius && this.velocity.y > 0) this.velocity.y = -this.velocity.y;
-			if (this.getCenterY() <= this.radius && this.velocity.y < 0) this.velocity.y = -this.velocity.y;
-			// Check if enter the goal post of Player 1 or Player 2
-			//if (this.getCenterX()+this.radius)
+			// Field Right
+			if (this.getCenterX()+this.radius >= Settings.fieldWidth-Settings.fieldPaddingX) {
+				potentialGoal = 1;
+				this.velocity.x = -this.velocity.x;
+			}
+			// Field Left
+			if (this.getCenterX()-this.radius <= Settings.fieldPaddingX) {
+				potentialGoal = 2;
+				this.velocity.x = -this.velocity.x;
+			}
+			// Field Bottom or Top
+			if (this.getCenterY()+this.radius >= Settings.fieldHeight-Settings.fieldPaddingY ||
+				this.getCenterY()-this.radius <= Settings.fieldPaddingY) {
+				this.velocity.y = -this.velocity.y;
+			}
+
+			// If there is a potential goal, check the goal height conditions
+			if (potentialGoal != 0 && this.getCenterY() >= Settings.getGoalY() && this.getCenterY() <= Settings.getGoalY()+Settings.getGoalHeight()) {
+				this.goal = potentialGoal;
+			}
 
 			// Slow it down
 			this.velocity.multiplyMe(Settings.dampening);
 		};
+
+		var myBall = new superC();
 		myBall.name = "ball";
 		myBall.size = Vector2.new(Settings.ballRadius, Settings.ballRadius);
-		console.log(myBall.size);*/
+		myBall.radius = myBall.size.x/2;
 		return myBall;
 	}
 

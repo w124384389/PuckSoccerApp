@@ -1,5 +1,5 @@
-define(["match", "settings", "asset_loader"], function (Match, Settings, AssetLoader) {
-	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch, context, background;
+define(["match", "settings", "asset_loader", "navigation"], function (Match, Settings, AssetLoader, Navigation) {
+	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch, background;
 
 	function makeNewGame() {
 		if (myGame == null) {
@@ -31,7 +31,6 @@ define(["match", "settings", "asset_loader"], function (Match, Settings, AssetLo
 
 	var proto = {
 		init: function (canvas) {
-			context = canvas.getContext("2d");
 			dt = 1000 / 60;  // constant dt step of 1 frame every 60 seconds
 			last = timeStamp();
 			// Creates a new match
@@ -40,6 +39,7 @@ define(["match", "settings", "asset_loader"], function (Match, Settings, AssetLo
 			return true;
 		},
 		start: function () {
+			Navigation.ingameMenu();
 			animationLoop(this);
 		},
 		update: function (deltaTime) {
@@ -50,26 +50,39 @@ define(["match", "settings", "asset_loader"], function (Match, Settings, AssetLo
 			for (var i = 0; i < myMatch.pucks.length; i += 1) {
 				myMatch.pucks[i].move(deltaTime);
 			}
-			
-			// Check collisition with all the other pucks
-			for (var i = 0; i < myMatch.pucks.length; i += 1) {
-				for (var j = 0; j < myMatch.pucks.length; j += 1) {
-					myMatch.pucks[i].collide(myMatch.pucks[j]);
+
+			// If any goal, then add to the corresponding player
+			// Else, update all the collisions
+			if (myMatch.pucks[10].goal != 0) {
+				this.addGoal(myMatch.pucks[10].goal-1);
+			} else {
+				// Check collision withing each puck
+				for (var i = 0; i < myMatch.pucks.length; i += 1) {
+					for (var j = 0; j < myMatch.pucks.length; j += 1) {
+						myMatch.pucks[i].collide(myMatch.pucks[j]);
+					}
 				}
 			}
 		},
 		draw: function () {
-			// Clean screen
-			context.clearRect(0, 0, Settings.gameWidth, Settings.gameHeight);
-			this.drawBackground();
-			// Draw pucks
+			// Draw the field and the pucks
+			this.drawField();
+		},
+		drawField: function () {
+			// Clean the field canvas
+			Navigation.getContext().clearRect(Settings.fieldOffsetX, Settings.fieldOffsetY, Settings.fieldWidth, Settings.fieldHeight);
+			
+			Navigation.getContext().drawImage(AssetLoader.imgs["field_bg"], 0, 0, Settings.fieldWidth, Settings.fieldHeight);
 			for (var i = 0; i < myMatch.pucks.length; i += 1) {
-				myMatch.pucks[i].draw(context);
+				myMatch.pucks[i].draw(Navigation.getContext());
 			}
 		},
-		drawBackground: function () {
-			//context.drawImage(background, 0, 0, Settings.fieldWidth, Settings.fieldHeight);
-			context.drawImage(AssetLoader.imgs["bg"], 0, 0, Settings.fieldWidth, Settings.fieldHeight);
+		addGoal: function (playerId) {
+			alert("Goooal! Congratz player " + (playerId+1));
+			myMatch.getPlayer(playerId).score += 1;
+			console.log(myMatch.getPlayer(playerId).score);
+			myMatch.reset();
+			myMatch.pucks[10].goal = 0;
 		}
 	};
 	return makeNewGame();		

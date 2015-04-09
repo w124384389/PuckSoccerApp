@@ -25,11 +25,11 @@ define (function () {
 
 	var proto = {
 		"imgs": {
-			"bg"			: "app/img/background.jpg",
+			"field_bg"		: "app/img/field_bg.jpg",
 			"p1"			: "app/img/puck_blue.png",
 			"p2"			: "app/img/puck_red.png",
 			"ball"			: "app/img/puck_ball.png",
-			"menu_bg"		: "app/img/menu_bg.png",
+			"menu_bg"		: "app/img/menu_bg.jpg",
 		},
 		"totalAssest": numImgs,
 		init: function () {

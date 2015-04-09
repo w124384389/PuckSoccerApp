@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>RequireJS image plugin</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body>
+        <div class="wrapper" id="main">
+            <h1>Puck Soccer</h1>
+            <canvas id="canvas">
+                <p>You're browser does not support the required functionality to play this game.</p>
+                <p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
+            </canvas>
+        </div>
+        <script src="lib/require.js" data-main="app/main"></script>
+        <!--script>
+            require.config({
+                waitSeconds : 45, //should be enough to load images
+                paths : {
+                    image : 'src/image' //alias to plugin
+                }
+            });
+
+            require([
+                'image!img/lol_cat.jpg'
+            ], function (cat){
+                var wrapper = document.getElementById('canvas');
+                var context = wrapper.getContext("2d");
+                context.drawImage(cat, 10, 10);
+            });
+        </script -->
+    </body>
+</html>

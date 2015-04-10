@@ -1,5 +1,5 @@
 define(["match", "settings", "asset_loader", "navigation"], function (Match, Settings, AssetLoader, Navigation) {
-	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch, background;
+	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch;
 
 	function makeNewGame() {
 		if (myGame == null) {
@@ -40,6 +40,7 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 		},
 		start: function () {
 			Navigation.ingameMenu();
+			myMatch.start(true);
 			animationLoop(this);
 		},
 		update: function (deltaTime) {
@@ -51,9 +52,10 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 				myMatch.pucks[i].move(deltaTime);
 			}
 
-			// If any goal, then add to the corresponding player
+			// If any goal, then add to the corresponding player and 
 			// Else, update all the collisions
 			if (myMatch.pucks[10].goal != 0) {
+				myMatch.endTurn(false, false);
 				this.addGoal(myMatch.pucks[10].goal-1);
 			} else {
 				// Check collision withing each puck
@@ -73,6 +75,10 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			Navigation.getContext().clearRect(Settings.fieldOffsetX, Settings.fieldOffsetY, Settings.fieldWidth, Settings.fieldHeight);
 			
 			Navigation.getContext().drawImage(AssetLoader.imgs["field_bg"], 0, 0, Settings.fieldWidth, Settings.fieldHeight);
+			
+			// Draw the selected puck
+			myMatch.drawSelectedPuck(Navigation.getContext());
+
 			for (var i = 0; i < myMatch.pucks.length; i += 1) {
 				myMatch.pucks[i].draw(Navigation.getContext());
 			}
@@ -83,6 +89,7 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			console.log(myMatch.getPlayer(playerId).score);
 			myMatch.reset();
 			myMatch.pucks[10].goal = 0;
+			myMatch.startTurn(playerId == 0 ? false : true);
 		}
 	};
 	return makeNewGame();		

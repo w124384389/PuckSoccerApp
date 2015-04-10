@@ -10,12 +10,13 @@ define(["vector2"], function (Vector2) {
 		fieldOffsetY: 100,
 		fieldPaddingX: 30,
 		fieldPaddingY: 15,
-		godMode: true,
+		godMode: false,
 		dampening: 0.95,
-		pullStrength: 0.08,
+		pullStrength: 0.1,
 		repulsion: 0.95,
 		puckRadius: 50,
 		ballRadius: 25,
+		turnCooldown: 5,
 		getGoalWidth: function () {
 			return this.fieldPaddingX;
 		},

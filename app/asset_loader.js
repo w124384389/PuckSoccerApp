@@ -30,6 +30,8 @@ define (function () {
 			"p2"			: "app/img/puck_red.png",
 			"ball"			: "app/img/puck_ball.png",
 			"menu_bg"		: "app/img/menu_bg.jpg",
+			"selected"		: "app/img/selected.png",
+			"dir_circle"	: "app/img/direction_circle.png",
 		},
 		"totalAssest": numImgs,
 		init: function () {

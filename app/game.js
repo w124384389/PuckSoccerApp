@@ -36,6 +36,7 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			// Creates a new match
 			myMatch = Match.new();
 			myMatch.init(canvas);
+			Navigation.init(this);
 			return true;
 		},
 		start: function () {

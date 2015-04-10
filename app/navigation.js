@@ -28,27 +28,48 @@ define(["asset_loader", "settings"], function (AssetLoader, Settings) {
 
 			// Setup button clicks
 			//console.log($(".play").click());
-			/*
-			$(".play").click(function() {
-				//$('#main').hide();
-				console.log("f");
-			});*/
 
-			///*
+			/*
 			var b = newButton("New Game");
 			b.insertAfter(el);//*/
 			return true;
+		},
+		init: function (Game) {
+			var that = this;
+			$("#play").click(function() {
+				Game.start();
+			});
+			$("#credit").click(function() {
+				that.creditsMenu();
+			});
+			this.mainMenu();
 		},
 		getGameFieldCanvas: function () {
 			return canvasGameField;
 		},
 		mainMenu: function () {
-			//$('#ingame').hide();
-			//$('#main').show();
+			$('#credits').hide();
+			$('#ingame').hide();
+			$('#addPlayers').hide();
+			$('#main').show();
+		},
+		creditsMenu: function () {
+			$('#ingame').hide();
 			$('#main').hide();
-			//$('#game_field').hide();
+			$('#addPlayers').hide();
+			$('#credits').show();
+		},
+		addPlayersMenu: function () {
+			$('#credits').hide();
+			$('#ingame').hide();
+			$('#main').hide();
+			$('#addPlayers').show();
 		},
 		ingameMenu: function () {
+			$('#credits').hide();
+			$('#main').hide();
+			$('#addPlayers').hide();
+			$('#ingame').show();
 			context.drawImage(AssetLoader.imgs["menu_bg"], 0, 0, Settings.gameWidth, Settings.gameHeight);
 		},
 		getContext: function () {

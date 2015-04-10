@@ -140,7 +140,24 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 				selectedSize = (this.getSelectedPuck().radius + 30) * this.distanceSelected.magnitude()/this.getSelectedPuck().radius;
 				selectedPos.x = this.getSelectedPuck().getCenterX() - selectedSize/2;
 				selectedPos.y = this.getSelectedPuck().getCenterY() - selectedSize/2;
+
+				var translateX = selectedPos.x+(selectedSize/2);
+				var translateY = selectedPos.y+(selectedSize/2);
+
+				context.save();
+				context.translate(translateX,translateY);
+				/*// Draw the arrow
+				context.setLineDash([3, 6]);
+				context.beginPath();
+				context.moveTo(0, 0);
+				context.lineWidth = 5;
+				context.lineTo(-mouseX + selectedPos.x, -mouseY + selectedPos.y);
+				context.stroke();*/
+				context.rotate(this.distanceSelected.angle(true));
+				context.translate(-translateX,-translateY);
+
 				context.drawImage(AssetLoader.imgs["dir_circle"], selectedPos.x, selectedPos.y, selectedSize, selectedSize);
+				context.restore();
 			}
 		}
 	};

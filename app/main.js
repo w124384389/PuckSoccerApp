@@ -14,12 +14,13 @@ requirejs(["game", "jquery", "navigation", "settings"], function (Game, $, Navig
 		console.log("Navigation setup" + (loaded ? " " : "NOT ") + "initialized.");
 		
 		loaded = Game.init(Navigation.getGameFieldCanvas());
-		if (loaded) {
+		// TODO: add this as a onclick function for the "Play" button
+		/*if (loaded) {
 			alert("Game initialized.");
 			Game.start();
 		} else {
 			alert("Game NOT initialized.");
-		}
+		}*/
 	});
 });
 

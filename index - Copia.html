@@ -1,0 +1,30 @@
+<html><head></head><body>
+
+<canvas id="myCanvas" width="233" height="233" style="border:1px solid #d3d3d3;">
+your browser does not support the canvas tag </canvas>
+
+	<script type="text/javascript">
+
+		var c=document.getElementById("myCanvas");
+		var ctx=c.getContext("2d");
+		var canvasWidth=233;
+		var canvasHeight=233;
+		var rectWidth=100;
+		var rectHeight=150;
+		var x=30;
+		var y=30;
+		var translateX= x+(rectWidth/2);
+		var translateY= y+(rectHeight/2);
+
+		var bg = new Image();
+		bg.src = "https://mdn.mozillademos.org/files/5397/rhino.jpg";
+		ctx.drawImage(bg, 0, 0, c.width, c.height);
+		ctx.fillRect(x,y,rectWidth,rectHeight);
+		ctx.translate(translateX,translateY);
+		ctx.rotate(5*Math.PI/64);
+		ctx.translate(-translateX,-translateY); 
+		ctx.drawImage(bg, x, y, rectWidth, rectHeight);
+	</script>
+
+
+</body></html>

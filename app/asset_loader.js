@@ -32,6 +32,7 @@ define (function () {
 			"menu_bg"		: "app/img/menu_bg.jpg",
 			"selected"		: "app/img/selected.png",
 			"dir_circle"	: "app/img/direction_circle.png",
+			"dir_arrow"		: "app/img/direction_arrow.png",
 		},
 		"totalAssest": numImgs,
 		init: function () {

@@ -1,5 +1,5 @@
 define(["match", "settings", "asset_loader", "navigation"], function (Match, Settings, AssetLoader, Navigation) {
-	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch;
+	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch, isPlaying = false;
 
 	function makeNewGame() {
 		if (myGame == null) {
@@ -13,6 +13,10 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 	}
 
 	function animationLoop () {
+		if (!isPlaying) {
+			return;
+		}
+
 		window.setTimeout(animationLoop, dt);
 
 		now = timeStamp();
@@ -25,8 +29,24 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			accumulator -= dt;
 		}*/
 		myGame.update(dt);
-		
 		myGame.draw();
+	}
+
+	function addGoal (playerId) {
+		alert("Goooal! Congratz player " + (playerId+1));
+		myMatch.getPlayer(playerId).score += 1;
+		Navigation.setScreenText("score_"+playerId, myMatch.getPlayer(playerId).score);
+
+		// Check if the current player get the goals to win
+		if (myMatch.getPlayer(playerId).score == Settings.winGoals) {
+			alert("It is over! Player " + (playerId+1) + " is the WINNER!");
+			isPlaying = false;
+		} else {
+			myMatch.reset();
+			// Reset the goal status in the 'ball' puck
+			myMatch.pucks[10].goal = 0;
+			myMatch.startTurn(playerId == 0 ? false : true);
+		}
 	}
 
 	var proto = {
@@ -40,9 +60,19 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			return true;
 		},
 		start: function () {
-			Navigation.ingameMenu();
+			Navigation.changeScreen(Navigation.ScreenId.ingame);
 			myMatch.start(true);
+
+			// Reset the scores to zero
+			Navigation.setScreenText("score_0", 0);
+			Navigation.setScreenText("score_1", 0);
+
+			isPlaying = true;
+
 			animationLoop(this);
+		},
+		stop: function () {
+			isPlaying = false;
 		},
 		update: function (deltaTime) {
 			// Update general input
@@ -57,7 +87,7 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			// Else, update all the collisions
 			if (myMatch.pucks[10].goal != 0) {
 				myMatch.endTurn(false, false);
-				this.addGoal(myMatch.pucks[10].goal-1);
+				addGoal(myMatch.pucks[10].goal-1);
 			} else {
 				// Check collision withing each puck
 				for (var i = 0; i < myMatch.pucks.length; i += 1) {
@@ -83,14 +113,6 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 			for (var i = 0; i < myMatch.pucks.length; i += 1) {
 				myMatch.pucks[i].draw(Navigation.getContext());
 			}
-		},
-		addGoal: function (playerId) {
-			alert("Goooal! Congratz player " + (playerId+1));
-			myMatch.getPlayer(playerId).score += 1;
-			console.log(myMatch.getPlayer(playerId).score);
-			myMatch.reset();
-			myMatch.pucks[10].goal = 0;
-			myMatch.startTurn(playerId == 0 ? false : true);
 		}
 	};
 	return makeNewGame();		

@@ -70,4 +70,17 @@ a {
 	background-color: #B30D5D; 
 	background-image: -webkit-linear-gradient(bottom, #B30D5D 0%, #FB1886 100%); 
 	background-image: linear-gradient(to bottom, #B30D5D 0%, #FB1886 100%); 
-} 
+}
+
+.score {
+	display: block; 
+	width: 150px; 
+	margin: 0 auto; 
+	height: 30px; 
+	line-height: 30px; 
+	border: 1px solid #AA2666; 
+	color: white;
+	font-weight: bold; 
+	text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; 
+	border-radius: 5px;
+}

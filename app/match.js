@@ -157,6 +157,7 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 				context.translate(-translateX,-translateY);
 
 				context.drawImage(AssetLoader.imgs["dir_circle"], selectedPos.x, selectedPos.y, selectedSize, selectedSize);
+				context.drawImage(AssetLoader.imgs["dir_arrow"], selectedPos.x, selectedPos.y, 10, 10);
 				context.restore();
 			}
 		}

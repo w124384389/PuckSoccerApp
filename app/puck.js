@@ -15,16 +15,21 @@ define(["vector2", "settings", "asset_loader"], function (Vector2, Settings, Ass
 
 	var proto = {
 		getCenterX: function () {
-			return this.position.x + this.size.x/2;
+			return this.position.x + this.radius;
 		},
 		getCenterY: function () {
-			return this.position.y + this.size.y/2;
+			return this.position.y + this.radius;
 		},
 		draw: function (context) {
 			/*
 			// Origin coordinate
 			context.fillStyle = "black";
 			context.fillRect(this.position.x, this.position.y, this.size.x, this.size.y);*/
+
+			context.beginPath();
+			context.moveTo(this.getCenterX(), this.getCenterY());
+			context.lineTo(this.getCenterX() + this.velocity.x + 50, this.getCenterY() + this.velocity.y + 50);
+			context.stroke();
 			
 			context.drawImage(AssetLoader.imgs[this.name], this.position.x, this.position.y, this.size.x, this.size.y);			
 			/*
@@ -37,13 +42,22 @@ define(["vector2", "settings", "asset_loader"], function (Vector2, Settings, Ass
 			// Increment location by velocity
 			this.position.plusMe(this.velocity);
 
-			if (this.velocity.x > 0 && this.getCenterX() >= Settings.fieldWidth-this.radius-Settings.fieldPaddingX ||
-				this.velocity.x < 0 && this.getCenterX() <= this.radius+Settings.fieldPaddingX) this.velocity.x = -this.velocity.x;
-			if (this.velocity.y > 0 && this.getCenterY() >= Settings.fieldHeight-this.radius-Settings.fieldPaddingY || 
-				this.velocity.y < 0 && this.getCenterY() <= this.radius+Settings.fieldPaddingY) this.velocity.y = -this.velocity.y;
+			if (this.velocity.x > 0 && this.getCenterX() >= Settings.fieldWidth-this.radius-Settings.fieldPaddingX + Settings.fieldOffsetX) {
+				this.velocity.x = -this.velocity.x;
+			}
+			if (this.velocity.x < 0 && this.getCenterX() <= this.radius+Settings.fieldPaddingX + Settings.fieldOffsetX) {
+				this.velocity.x = -this.velocity.x;
+			}
+			if (this.velocity.y > 0 && this.getCenterY() >= Settings.fieldHeight-this.radius-Settings.fieldPaddingY + Settings.fieldOffsetY) {
+				this.velocity.y = -this.velocity.y;
+			} 
+			if (this.velocity.y < 0 && this.getCenterY() <= this.radius+Settings.fieldPaddingY + Settings.fieldOffsetY) {
+				this.velocity.y = -this.velocity.y;
+			}
+
 			// Slow it down
-			this.velocity.multiplyMe(Settings.dampening);
-			//if (this.velocity.magnitude() < 0.1) this.velocity = Vector2.new(0, 0);
+			this.velocity.multiplyMe(Settings.puckDampening);
+			if (this.velocity.magnitude() < 0.05) this.velocity = Vector2.new(0, 0);
 		},
 		collide: function (other) {
 			if (other != this && this.velocity.magnitude() > 0.1) {

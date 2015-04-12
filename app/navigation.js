@@ -28,13 +28,12 @@ define(["asset_loader", "settings"], function (AssetLoader, Settings) {
 			canvas.width = Settings.gameWidth;
 			canvas.height = Settings.gameHeight;
 
-			canvasGameField = document.getElementById("game_field");
-			canvasGameField.width = Settings.fieldWidth;
-			canvasGameField.height = Settings.fieldHeight;
-
 			el = $("canvas");
 			context = canvas.getContext("2d");
-			fieldContext = canvasGameField.getContext("2d");
+			$("#menu").attr("class", "");
+			$("#canvas").attr("class", "");
+
+			// Set the background in the
 			this.changeScreen(ScreenId.main);
 
 			return true;
@@ -42,18 +41,28 @@ define(["asset_loader", "settings"], function (AssetLoader, Settings) {
 		init: function (Game) {
 			// Defines all the buttons of the game, according to its behavior
 			var that = this;
-			$("#play").click(function() {
+			$("#play_btn").click(function() {
+				$(".profile0").attr("src", $(AssetLoader.imgs["profile0"]).attr("src"));
+				$(".profile1").attr("src", $(AssetLoader.imgs["profile0"]).attr("src"));
+				that.changeScreen(ScreenId.addPlayers);
+			});
+			$("#start_btn").click(function() {
+				$("#name0").html($(".name0").val());
+				$("#name1").html($(".name1").val());	
 				Game.start();
 			});
-			$("#credit").click(function() {
+			$("#credits_btn").click(function() {
 				that.changeScreen(ScreenId.credits);
 			});
-			$("#back_main").click(function() {
+			$(".back_main_btn").click(function() {
 				that.changeScreen(ScreenId.main);
+			});
+			$("#score_0").click(function() {
+				console.log("score 0");
 			});
 		},
 		getGameFieldCanvas: function () {
-			return canvasGameField;
+			return canvas;
 		},
 		changeScreen: function (nextScreen) {
 			for (var i = 0; i < Object.getOwnPropertyNames(ScreenId).length; i += 1) {
@@ -62,7 +71,7 @@ define(["asset_loader", "settings"], function (AssetLoader, Settings) {
 			$("#" + Object.getOwnPropertyNames(ScreenId)[nextScreen]).show();
 		},
 		getContext: function () {
-			return fieldContext;
+			return context;
 		},
 		setScreenText: function (type, value) {
 			console.log(type);

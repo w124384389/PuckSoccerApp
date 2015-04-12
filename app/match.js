@@ -1,6 +1,6 @@
 define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loader"], function (Puck, Vector2, Settings, Player, Formation, Ball, AssetLoader) {
 	
-	var players = [], mouseDown = false, mouseUp = false, mouseX, mouseY, canv,
+	var players = [], mouseDown = false, mouseUp = false, mouseX, mouseY, canv, mag,
 		playerOneTurn = true, turnTimer,
 		minIndex = 0, maxIndex = 10,
 		puckSelected = -1, selectedPos = Vector2.new(), selectedSize = 0;
@@ -13,7 +13,7 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 	
 	var proto = {
 		"pucks": [],
-		start: function (playerOne) {
+		start: function (playerOne, p0Info, p1Info) {
 			this.startTurn(playerOne);
 		},
 		endTurn: function (changePlayer, loop) {
@@ -65,16 +65,16 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 			canvas.addEventListener("mousedown", function (e) {
 				mouseDown = true;
 				mouseUp = false;
-				mouseX = e.pageX - Settings.fieldOffsetX;
-				mouseY = e.pageY - Settings.fieldOffsetY;
+				mouseX = e.pageX;
+				mouseY = e.pageY;
 			});
 			canvas.addEventListener("mouseup", function (e) {
 				mouseDown = false;
 				mouseUp = true;
 			});
 			canvas.addEventListener("mousemove", function (e) {
-				mouseX = e.pageX - Settings.fieldOffsetX;
-				mouseY = e.pageY - Settings.fieldOffsetY;
+				mouseX = e.pageX;
+				mouseY = e.pageY;
 				// Get the distance vector if selected puck
 				if (puckSelected != -1) {
 					that.distanceSelected.x = that.pucks[puckSelected].getCenterX() - mouseX;
@@ -107,8 +107,9 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 				}
 			} else if (mouseUp && puckSelected != -1) {
 				this.pucks[puckSelected].velocity =
-					Vector2.new(this.pucks[puckSelected].getCenterX() - mouseX, this.pucks[puckSelected].getCenterY() - mouseY).
-					multiplyMe(Settings.pullStrength);
+					Vector2.new(this.pucks[puckSelected].getCenterX() - mouseX, this.pucks[puckSelected].getCenterY() - mouseY);
+				mag = this.pucks[puckSelected].velocity.magnitude()/Settings.maxDirectionalSize;
+				this.pucks[puckSelected].velocity.normalize().multiplyMe((Math.abs(mag) > 0.5 ? 1 : mag*2) * Settings.pullStrength);
 				puckSelected = -1;
 				this.endTurn(true, true);
 			}
@@ -129,7 +130,8 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 			}
 			// Positions the ball
 			this.pucks[10].velocity = Vector2.new();
-			this.pucks[10].position = Vector2.new(Settings.fieldWidth/2 - this.pucks[10].radius, Settings.fieldHeight/2 - this.pucks[10].radius);
+			this.pucks[10].position = Vector2.new(Settings.fieldWidth/2 - this.pucks[10].radius + Settings.fieldOffsetX,
+				Settings.fieldHeight/2 - this.pucks[10].radius + Settings.fieldOffsetY);
 
 		},
 		getPlayer: function (id) {
@@ -138,6 +140,7 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 		drawSelectedPuck: function (context) {
 			if (this.getSelectedPuck() != null) {
 				selectedSize = (this.getSelectedPuck().radius + 30) * this.distanceSelected.magnitude()/this.getSelectedPuck().radius;
+				selectedSize = selectedSize > Settings.maxDirectionalSize ? Settings.maxDirectionalSize : selectedSize;
 				selectedPos.x = this.getSelectedPuck().getCenterX() - selectedSize/2;
 				selectedPos.y = this.getSelectedPuck().getCenterY() - selectedSize/2;
 
@@ -146,18 +149,10 @@ define(["puck", "vector2", "settings", "player", "formation", "ball", "asset_loa
 
 				context.save();
 				context.translate(translateX,translateY);
-				/*// Draw the arrow
-				context.setLineDash([3, 6]);
-				context.beginPath();
-				context.moveTo(0, 0);
-				context.lineWidth = 5;
-				context.lineTo(-mouseX + selectedPos.x, -mouseY + selectedPos.y);
-				context.stroke();*/
 				context.rotate(this.distanceSelected.angle(true));
 				context.translate(-translateX,-translateY);
-
+				// Draw the direction circle/arrow
 				context.drawImage(AssetLoader.imgs["dir_circle"], selectedPos.x, selectedPos.y, selectedSize, selectedSize);
-				context.drawImage(AssetLoader.imgs["dir_arrow"], selectedPos.x, selectedPos.y, 10, 10);
 				context.restore();
 			}
 		}

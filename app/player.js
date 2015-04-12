@@ -7,8 +7,10 @@ define(function () {
 	}
 
 	var proto = {
-		"score": 0,
-		"formation": ""
+		score: 0,
+		formation: "",
+		name: "",
+		profile: ""
 	};
 
 	return {

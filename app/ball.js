@@ -10,40 +10,44 @@ define (["puck", "settings", "vector2", "game"], function (Puck, Settings, Vecto
 		// 2: player two
 		superC.prototype.goal = 0;
 		superC.prototype.move = function (deltaTime) {			
+			if (this.velocity.magnitude() <= 0) return;
+			
 			potentialGoal = 0;
-
-			// Field Right
-			if (this.getCenterX()+this.radius >= Settings.fieldWidth-Settings.fieldPaddingX) {
-				potentialGoal = 1;
-				//this.position.x = Settings.fieldWidth - this.radius;
-				this.velocity.x = -this.velocity.x;
-			}
-			// Field Left
-			if (this.getCenterX()-this.radius <= Settings.fieldPaddingX) {
-				potentialGoal = 2;
-				//this.position.x = this.radius;
-				this.velocity.x = -this.velocity.x;
-			}
-			// Field Bottom
-			if (this.getCenterY()+this.radius >= Settings.fieldHeight-Settings.fieldPaddingY) {
-				//this.position.y = Settings.fieldHeight - this.radius;
-				this.velocity.y = -this.velocity.y;
-			} 
-			// Field Top
-			if (this.getCenterY()-this.radius <= Settings.fieldPaddingY) {
-				//this.position.y = this.radius;
-				this.velocity.y = -this.velocity.y;
-			}
-
-			// If there is a potential goal, check the goal height conditions
-			if (potentialGoal != 0 && this.getCenterY() >= Settings.getGoalY() && this.getCenterY() <= Settings.getGoalY()+Settings.getGoalHeight()) {
-				this.goal = potentialGoal;
-			}
 
 			// Increment location by velocity
 			this.position.plusMe(this.velocity);
+
+			// Field Right
+			if (this.velocity.x > 0 && this.getCenterX()+this.radius > Settings.fieldWidth-Settings.fieldPaddingX + Settings.fieldOffsetX) {
+				potentialGoal = 1;
+				//this.velocity.x = -this.velocity.x;
+				this.velocity.x = -Settings.ballSpeed * deltaTime;
+			}
+			// Field Left
+			if (this.velocity.x < 0 && this.getCenterX()-this.radius < Settings.fieldPaddingX + Settings.fieldOffsetX) {
+				potentialGoal = 2;
+				//this.velocity.x = -this.velocity.x;
+				this.velocity.x = Settings.ballSpeed * deltaTime;
+			}
+			// Field Bottom
+			if (this.velocity.y > 0 && this.getCenterY()+this.radius > Settings.fieldHeight-Settings.fieldPaddingY + Settings.fieldOffsetY) {
+				//this.velocity.y = -this.velocity.y;
+				this.velocity.y = -Settings.ballSpeed * deltaTime;
+			} 
+			// Field Top
+			if (this.velocity.y < 0 && this.getCenterY()-this.radius < Settings.fieldPaddingY + Settings.fieldOffsetY) {
+				//this.velocity.y = -this.velocity.y;
+				this.velocity.y = Settings.ballSpeed * deltaTime;
+			}
+
+			// If there is a potential goal, check the goal height conditions
+			if (potentialGoal != 0 && this.getCenterY() >= Settings.getGoalY() + Settings.fieldOffsetY &&
+				this.getCenterY() <= Settings.getGoalY()+Settings.getGoalHeight() + Settings.fieldOffsetY) {
+				this.goal = potentialGoal;
+			}
+
 			// Slow it down
-			this.velocity.multiplyMe(Settings.dampening);
+			this.velocity.multiplyMe(Settings.ballDampening);
 		};
 
 		var myBall = new superC();

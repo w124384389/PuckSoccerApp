@@ -3,7 +3,9 @@ define(["vector2", "settings"], function (Vector2, Settings) {
 	var myFormation, halfFieldWidth, fieldHeight;
 
 	function makeNewPosition(xPerc, yPerc, leftSide) {
-		return Vector2.new(leftSide ? xPerc*halfFieldWidth - Settings.puckRadius/2 : (1 - xPerc)*halfFieldWidth + halfFieldWidth - Settings.puckRadius/2, yPerc*fieldHeight - Settings.puckRadius/2);
+		return Vector2.new(
+			(leftSide ? xPerc*halfFieldWidth - Settings.puckRadius/2 : (1 - xPerc)*halfFieldWidth + halfFieldWidth - Settings.puckRadius/2) + Settings.fieldOffsetX,
+			yPerc*fieldHeight - Settings.puckRadius/2 + Settings.fieldOffsetY);
 	}
 
 	function createFormation(positions, leftSide) {

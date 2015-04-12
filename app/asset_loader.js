@@ -32,9 +32,9 @@ define (function () {
 			"menu_bg"		: "app/img/menu_bg.jpg",
 			"selected"		: "app/img/selected.png",
 			"dir_circle"	: "app/img/direction_circle.png",
-			"dir_arrow"		: "app/img/direction_arrow.png",
+			"profile0"		: "app/img/profiles/profile0.jpg",
 		},
-		"totalAssest": numImgs,
+		totalAssest: numImgs,
 		init: function () {
 			assetsLoaded = 0;
 			numImgs = Object.keys(this.imgs).length;

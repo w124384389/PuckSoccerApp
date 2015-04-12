@@ -1,4 +1,4 @@
-define(["match", "settings", "asset_loader", "navigation"], function (Match, Settings, AssetLoader, Navigation) {
+define(["engine", "match", "settings", "asset_loader", "navigation"], function (Engine, Match, Settings, AssetLoader, Navigation) {
 	var last, dt, now, passed = 0, accumulator = 0, myGame, myMatch, isPlaying = false;
 
 	function makeNewGame() {
@@ -49,17 +49,69 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 		}
 	}
 
+	function update (deltaTime) {
+		// Update general input
+		myMatch.inputUpdate();
+
+		
+
+		// If any goal, then add to the corresponding player and 
+		// Else, update all the collisions
+		if (myMatch.pucks[10].goal != 0) {
+			myMatch.endTurn(false, false);
+			addGoal(myMatch.pucks[10].goal-1);
+		} else {
+			// Check collision withing each puck
+			for (var i = 0; i < myMatch.pucks.length; i += 1) {
+				for (var j = 0; j < myMatch.pucks.length; j += 1) {
+					myMatch.pucks[i].collide(myMatch.pucks[j], deltaTime);
+				}
+			}
+		}
+		// Update position of pucks
+		for (var i = 0; i < myMatch.pucks.length; i += 1) {
+			myMatch.pucks[i].move(deltaTime);
+		}
+	}
+
+	function draw () {
+		// Clean the field canvas
+		Navigation.getContext().clearRect(0, 0, Settings.gameWidth, Settings.gameHeight);
+
+
+		// Draw the field and the pucks
+		drawField();
+	}
+
+	function drawField () {
+		Navigation.getContext().drawImage(AssetLoader.imgs["field_bg"], Settings.fieldOffsetX, Settings.fieldOffsetY, Settings.fieldWidth, Settings.fieldHeight);
+		
+		// Draw the ball
+		myMatch.pucks[10].draw(Navigation.getContext());
+
+		// Draw the selected puck
+		myMatch.drawSelectedPuck(Navigation.getContext());
+		
+		// Draw the pucks
+		for (var i = 0; i < myMatch.pucks.length - 1; i += 1) {
+			myMatch.pucks[i].draw(Navigation.getContext());
+		}
+	}
+
 	var proto = {
 		init: function (canvas) {
-			dt = 1000 / 60;  // constant dt step of 1 frame every 60 seconds
-			last = timeStamp();
+			//dt = 1000 / 60;  // constant dt step of 1 frame every 60 seconds
+			//last = timeStamp();
 			// Creates a new match
 			myMatch = Match.new();
 			myMatch.init(canvas);
 			Navigation.init(this);
+			Engine.init(update, draw);
 			return true;
 		},
 		start: function () {
+			Engine.play();
+
 			Navigation.changeScreen(Navigation.ScreenId.ingame);
 			myMatch.start(true);
 
@@ -69,50 +121,10 @@ define(["match", "settings", "asset_loader", "navigation"], function (Match, Set
 
 			isPlaying = true;
 
-			animationLoop(this);
+			//animationLoop(this);
 		},
 		stop: function () {
 			isPlaying = false;
-		},
-		update: function (deltaTime) {
-			// Update general input
-			myMatch.inputUpdate();
-
-			// Update position of pucks
-			for (var i = 0; i < myMatch.pucks.length; i += 1) {
-				myMatch.pucks[i].move(deltaTime);
-			}
-
-			// If any goal, then add to the corresponding player and 
-			// Else, update all the collisions
-			if (myMatch.pucks[10].goal != 0) {
-				myMatch.endTurn(false, false);
-				addGoal(myMatch.pucks[10].goal-1);
-			} else {
-				// Check collision withing each puck
-				for (var i = 0; i < myMatch.pucks.length; i += 1) {
-					for (var j = 0; j < myMatch.pucks.length; j += 1) {
-						myMatch.pucks[i].collide(myMatch.pucks[j]);
-					}
-				}
-			}
-		},
-		draw: function () {
-			// Draw the field and the pucks
-			this.drawField();
-		},
-		drawField: function () {
-			// Clean the field canvas
-			Navigation.getContext().clearRect(Settings.fieldOffsetX, Settings.fieldOffsetY, Settings.fieldWidth, Settings.fieldHeight);
-			
-			Navigation.getContext().drawImage(AssetLoader.imgs["field_bg"], 0, 0, Settings.fieldWidth, Settings.fieldHeight);
-			
-			// Draw the selected puck
-			myMatch.drawSelectedPuck(Navigation.getContext());
-
-			for (var i = 0; i < myMatch.pucks.length; i += 1) {
-				myMatch.pucks[i].draw(Navigation.getContext());
-			}
 		}
 	};
 	return makeNewGame();		

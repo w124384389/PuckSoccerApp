@@ -8,40 +8,46 @@
 </head>
 <body>
 	<div class="wrapper">
-		<canvas id="canvas">
-			<p>You're browser does not support the required functionality to play this game.</p>
-			<p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
-		</canvas>
-		<div id="menu">
+		<div id="menu" class="hidden">
+			<img src="app/img/menu_bg.jpg" class="bg"/>
 			<div id="main">
 				<h1>Puck Soccer</h1>
 				<ul>
-					<li><a href="#" class="button" id="play">Start Game</a></li>
-					<li><a href="#" class="button" id="credit">Credits</a></li>
+					<li><a href="#" class="button" id="play_btn">Play</a></li>
+					<li><a href="#" class="button" id="credits_btn">Credits</a></li>
 				</ul>
 			</div>
 			<div id="credits">
 				<h1>Credits</h1>
 				<ul>
-					<li><a href="#" class="button" id="back_main">Back</a></li>
+					<li><a href="#" class="button back_main_btn">Back</a></li>
 				</ul>
 			</div>
 			<div id="addPlayers">
 				<h1>Puck Soccer</h1>
 				<ul>
-					<li><a href="#" class="button" id="play">Start Game</a></li>
-					<li><a href="#" class="button">Credits</a></li>
+					<li><img src="" class="profile profile0"/></li>
+					<li><input class="name name0" value="player 1 name"/></li>
+					<h2>VS</h2>
+					<li><input class="name name1" value="player 2 name"/></li>
+					<li><img src="" class="profile profile1"/></li>
+					<li><a href="#" class="button" id="start_btn">Start!</a></li>
+					<li><a href="#" class="button back_main_btn">Back</a></li>
 				</ul>
 			</div>
 			<div id="ingame">
-				<ul>
-					<li><a href="#" class="score" id="score_0"></a></li>
-					<li><a href="#" class="score" id="score_1"></a></li>
-				</ul>
-				<canvas id="game_field">
+				<canvas id="canvas" class="hidden">
 					<p>You're browser does not support the required functionality to play this game.</p>
 					<p>Please update to a modern browser such as <a href="www.google.com/chrome/‎">Google Chrome</a> to play.</p>
 				</canvas>
+				<ul>
+					<li><img src="" class="profile profile0"/></li>
+					<li><h1 class="name" id="name0"></h1></li>
+					<li><img src="" class="profile profile1"/></li>
+					<li><h1 class="name" id="name1"></h1></li>
+					<li><a href="#" class="score" id="score_0"></a></li>
+					<li><a href="#" class="score" id="score_1"></a></li>
+				</ul>
 			</div>
 	</div>
 	<script data-main="app/main" src="lib/require.js"></script>

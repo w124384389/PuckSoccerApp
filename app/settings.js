@@ -1,5 +1,5 @@
-define(["vector2"], function (Vector2) {
-	var config, goalHeight = 120;
+define(["structures/vector2"], function (Vector2) {
+	var config, goalHeight = 100;
 
 	config = {
 		gameWidth: 800,
@@ -18,9 +18,9 @@ define(["vector2"], function (Vector2) {
 		ballSpeed: 80,
 		pullStrength: 15,
 		repulsion: 0.98,
-		puckRadius: 50,
+		puckRadius: 40,
 		ballRadius: 25,
-		turnCooldown: 5,
+		turnCooldown: 10,
 		maxDirectionalSize: 180,
 		winGoals: 2,
 		getGoalWidth: function () {
@@ -30,7 +30,7 @@ define(["vector2"], function (Vector2) {
 			return goalHeight;
 		},
 		getGoalY: function () {
-			return this.fieldHeight/2 - goalHeight/2;
+			return this.fieldHeight/2 - goalHeight/2 + this.fieldOffsetY;
 		},
 	};
 

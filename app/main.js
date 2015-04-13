@@ -7,7 +7,7 @@ requirejs.config({
 	}
 });
 
-requirejs(["game", "jquery", "navigation", "settings"], function (Game, $, Navigation, Settings) {
+requirejs(["structures/game", "jquery", "core/navigation", "settings"], function (Game, $, Navigation, Settings) {
 	
 	$(function() {		
 		var loaded = Navigation.setup($, Settings);

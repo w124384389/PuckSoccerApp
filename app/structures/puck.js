@@ -1,4 +1,4 @@
-define(["structures/vector2", "settings", "core/asset_loader"], function (Vector2, Settings, AssetLoader) {
+define(["structures/vector2", "settings", "core/asset_loader", "core/audio_center"], function (Vector2, Settings, AssetLoader, AudioCenter) {
 
 	var d, u, dMag, hitId;
 
@@ -81,6 +81,9 @@ define(["structures/vector2", "settings", "core/asset_loader"], function (Vector
 					this.velocity.y -= u.y * Settings.repulsion;
 					//this.velocity.plusMe(u.multiplyMe(-Settings.repulsion * this.radius));
 					//other.velocity.plusMe(u.multiplyMe(-1));
+					
+					// Play sfx
+					AudioCenter.playSfx("ball_hit");
 				}
 			}
 		}

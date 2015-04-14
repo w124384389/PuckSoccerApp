@@ -34,8 +34,13 @@ h1 {
 }
 h2 {
     position: absolute;
-    top: 5px; 
+    top: 250px; 
     left: 380px;
+}
+h3 {
+    position: absolute;
+    top: 5px;
+    left: 385px;
 }
 
 .hidden {
@@ -73,10 +78,64 @@ h2 {
     box-sizing: border-box;
 }
 
-#back_main_btn {
+li .name.name0{
     position: absolute;
-    top: 430px; 
-    left: 60px; 
+    top: 280px; 
+    left: 180px; 
+    border: 1px solid black; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+li .name.name1{
+    position: absolute;
+    top: 280px; 
+    left: 450px; 
+    border: 1px solid black; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+li .button.back_main_btn{
+    position: absolute;
+    top: 450px; 
+    left: 15px; 
+    border: 1px solid black; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#addPlayers li .profile.profile0{
+    position: absolute;
+    top: 230px; 
+    left: 30px; 
+    border: 1px solid black; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#addPlayers li .profile.profile1{
+    position: absolute;
+    top: 230px; 
+    left: 680px; 
+    border: 1px solid black; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#ingame li .profile.profile0{
+    position: absolute;
+    top: 10px; 
+    left: 10px; 
+    border: 1px solid black; 
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#ingame li .profile.profile1{
+    position: absolute;
+    top: 10px; 
+    left: 705px; 
     border: 1px solid black; 
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box; 
@@ -85,8 +144,8 @@ h2 {
 
 #start_btn {
     position: absolute;
-    top: 430px; 
-    left: 360px; 
+    top: 450px; 
+    left: 650px; 
     border: 1px solid black; 
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box; 
@@ -106,8 +165,8 @@ h2 {
 }
 
 .name {
-    display: block; 
-    width: 100px; 
+    display: block;
+    top:100px;
     margin: 0 auto; 
     height: 30px; 
     line-height: 30px; 
@@ -169,6 +228,32 @@ h2 {
     position: absolute;
     top: 30px; 
     left: 450px; 
+    border: 2px; 
+    border-style: solid;
+    border-color: #ff0000 #0000ff;
+    z-index: -1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#name0{
+    position: absolute;
+    font-size: 15px;
+    top: 30px; 
+    left: 240px; 
+    border: 2px; 
+    border-style: solid;
+    border-color: #ff0000 #0000ff;
+    z-index: -1;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box; 
+    box-sizing: border-box;
+}
+#name1{
+    position: absolute;
+    font-size: 15px;
+    top: 30px; 
+    left: 500px; 
     border: 2px; 
     border-style: solid;
     border-color: #ff0000 #0000ff;

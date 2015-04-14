@@ -1,4 +1,5 @@
-define(["structures/puck", "structures/vector2", "settings", "structures/player", "structures/formation", "structures/ball", "core/asset_loader"], function (Puck, Vector2, Settings, Player, Formation, Ball, AssetLoader) {
+define(["structures/puck", "structures/vector2", "settings", "structures/player", "structures/formation", "structures/ball", "core/asset_loader", "core/audio_center"],
+	function (Puck, Vector2, Settings, Player, Formation, Ball, AssetLoader, AudioCenter) {
 	
 	var players = [], mouseDown = false, mouseUp = false, mouseX, mouseY, canv, mag, inputPaused = false,
 		playerOneTurn = true, turnTimer, timerValue = 0,
@@ -35,7 +36,7 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 			turnTimer = setInterval((function() {
 				return function () {
 					// Check if the turn time is over for the current playing player
-					if (timerValue < 0) {
+					if (timerValue <= 0) {
 						that.endTurn(true, true);
 					}
 					//console.log("player " + (playerOneTurn?"one":"two") + " is playing");
@@ -122,6 +123,8 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 						}
 					}
 				} else if (mouseUp && puckSelected != -1) {
+					AudioCenter.playSfx("puck_whoosh");
+
 					this.pucks[puckSelected].velocity =
 						Vector2.new(this.pucks[puckSelected].getCenterX() - mouseX, this.pucks[puckSelected].getCenterY() - mouseY);
 					mag = this.pucks[puckSelected].velocity.magnitude()/Settings.maxDirectionalSize;

@@ -11,3 +11,9 @@ not the appearance of its content, and avoid unnecessary <div> tags less your do
 
 "Control the fps of an animation"
 ['http://creativejs.com/resources/requestanimationframe/']
+
+"soccer songs"
+["https://www.youtube.com/watch?v=RgWY8stfm1Y"]
+
+"Funny songs"
+["https://www.youtube.com/watch?v=vbrII7frHV0"]

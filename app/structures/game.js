@@ -1,4 +1,5 @@
-define(["core/engine", "structures/match", "settings", "core/asset_loader", "core/navigation"], function (Engine, Match, Settings, AssetLoader, Navigation) {
+define(["core/engine", "structures/match", "settings", "core/asset_loader", "core/navigation", "core/audio_center"],
+	function (Engine, Match, Settings, AssetLoader, Navigation, AudioCenter) {
 	
 	var myGame, myMatch, isPlaying = false, puck = {};
 
@@ -10,13 +11,15 @@ define(["core/engine", "structures/match", "settings", "core/asset_loader", "cor
 	}
 
 	function addGoal (playerId) {
-		alert("Goooal! Congratz player " + (playerId+1));
+		//alert("Goooal! Congratz player " + (playerId+1));
+		AudioCenter.playSfx("goal");
 		myMatch.getPlayer(playerId).score += 1;
 		Navigation.setScreenText("score_"+playerId, myMatch.getPlayer(playerId).score);
 
 		// Check if the current player get the goals to win
 		if (myMatch.getPlayer(playerId).score == Settings.winGoals) {
-			alert("It is over! Player " + (playerId+1) + " is the WINNER!");
+			//alert("It is over! Player " + (playerId+1) + " is the WINNER!");
+			AudioCenter.playSfx("match_end");
 			isPlaying = false;
 		} else {
 			myMatch.reset();
@@ -90,16 +93,18 @@ define(["core/engine", "structures/match", "settings", "core/asset_loader", "cor
 
 	var proto = {
 		init: function (canvas) {
-			//dt = 1000 / 60;  // constant dt step of 1 frame every 60 seconds
-			//last = timeStamp();
-			// Creates a new match
-			myMatch = Match.new();
-			myMatch.init(canvas);
 			Navigation.init(this);
 			Engine.init(update, draw);
+			AudioCenter.playTheme("main_theme");
 			return true;
 		},
 		start: function () {
+			AudioCenter.stopTheme("main_theme");
+
+			// Creates a new match
+			myMatch = Match.new();
+			myMatch.init(canvas);
+
 			Engine.play();
 
 			Navigation.changeScreen(Navigation.ScreenId.ingame);
@@ -110,8 +115,8 @@ define(["core/engine", "structures/match", "settings", "core/asset_loader", "cor
 			Navigation.setScreenText("score_1", 0);
 
 			isPlaying = true;
-
-			//animationLoop(this);
+			AudioCenter.playTheme("crowd");
+			AudioCenter.playSfx("match_start");
 		},
 		stop: function () {
 			isPlaying = false;

@@ -1,4 +1,4 @@
-define(["structures/vector2"], function (Vector2) {
+define([ "structures/vector2" ], function (Vector2) {
 	var config, goalHeight = 100;
 
 	config = {
@@ -30,8 +30,8 @@ define(["structures/vector2"], function (Vector2) {
 			return goalHeight;
 		},
 		getGoalY: function () {
-			return this.fieldHeight/2 - goalHeight/2 + this.fieldOffsetY;
-		},
+			return this.fieldHeight / 2 - goalHeight / 2 + this.fieldOffsetY;
+		}
 	};
 
 	return config;

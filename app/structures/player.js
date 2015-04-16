@@ -1,12 +1,12 @@
 define(function () {
-
-	function makeNewPlayer (formation) {
+	var proto;
+	function makeNewPlayer(formation) {
 		var player = Object.create(proto);
 		player.formation = formation;
 		return player;
 	}
 
-	var proto = {
+	proto = {
 		score: 0,
 		formation: "",
 		name: "",

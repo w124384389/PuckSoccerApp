@@ -1,5 +1,8 @@
 # PuckSoccerApp
 
+## Official Link:
+https://rawgit.com/w124384389/PuckSoccerApp/master/index.html
+
 ## Description
 
 Our "Puck Soccer" app is a web game meant to provide two users to compete against each other. 

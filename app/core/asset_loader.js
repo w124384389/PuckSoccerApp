@@ -1,8 +1,9 @@
+/* global Audio */
+/* global Image */
 define (function () {
+	var proto, myLoader, assetsLoaded, numImgs, numAudios;
 
-	var myLoader, assetsLoaded, numImgs, numAudios;
-
-	function makeNewAssetLoader () {
+	function makeNewAssetLoader() {
 		if (myLoader == null) {
 			myLoader = Object.create(proto);
 			myLoader.init();
@@ -12,10 +13,10 @@ define (function () {
 
 	function assetLoaded(dic, name) {
 		// don't count assets that have already loaded
-		if (myLoader[dic][name].status !== "loading" ) {
+		if (myLoader[ dic ][ name ].status !== "loading" ) {
 			return;
 		}
-		myLoader[dic][name].status = "loaded";
+		myLoader[ dic ][ name ].status = "loaded";
 		console.log("Loaded " + name);
 		assetsLoaded += 1;
 		// finished callback
@@ -24,14 +25,14 @@ define (function () {
 		}
 	}
 
-	var proto = {
+	proto = {
 		imgs: {
 			"field_bg"		: "app/img/field_bg.jpg",
 			"goals"			: "app/img/goals.png",
 			//"goal_post"		: "app/img/goal_post.png",
 			"selected"		: "app/img/selected.png",
 			"p1"			: "app/img/sprites/brazil.png",
-			"p2"			: "app/img/sprites/china.png",
+			"p2"			: "app/img/sprites/poland.png",
 			"ball"			: "app/img/sprites/puck_ball.png",
 			"menu_bg"		: "app/img/menu_bg.jpg",
 			"selected"		: "app/img/selected.png",
@@ -54,39 +55,39 @@ define (function () {
 			numImgs = Object.keys(this.imgs).length;
 			numAudios = Object.keys(this.audios).length;
 
-			var _this = this, src;
+			var _this = this, src, img, audio;
 			// load images
-			for (var img in this.imgs) {
+			for (img in this.imgs) {
 				if (this.imgs.hasOwnProperty(img)) {
 					//console.log("Loading " + img);
 					src = this.imgs[img];
 					// create a closure for event binding
 					(function (_this, img) {
-						_this.imgs[img] = new Image();
-						_this.imgs[img].status = "loading";
-						_this.imgs[img].name = img;
-						_this.imgs[img].onload = function () {
+						_this.imgs[ img ] = new Image();
+						_this.imgs[ img ].status = "loading";
+						_this.imgs[ img ].name = img;
+						_this.imgs[ img ].onload = function () {
 							assetLoaded.call(_this, "imgs", img);
 						};
-						_this.imgs[img].src = src;
+						_this.imgs[ img ].src = src;
 					})(_this, img);
 				}
 			}
 
 			// load audios
-			for (var audio in this.audios) {
+			for (audio in this.audios) {
 				if (this.audios.hasOwnProperty(audio)) {
 					//console.log("Loading " + audio);
 					src = this.audios[audio];
 					// create a closure for event binding
 					(function (_this, audio) {
-						_this.audios[audio] = new Audio();
-						_this.audios[audio].status = "loading";
-						_this.audios[audio].name = audio;
-						_this.audios[audio].addEventListener("canplaythrough", function () {
+						_this.audios[ audio ] = new Audio();
+						_this.audios[ audio ].status = "loading";
+						_this.audios[ audio ].name = audio;
+						_this.audios[ audio ].addEventListener("canplaythrough", function () {
 							assetLoaded.call(_this, "audios", audio);
 						});
-						_this.audios[audio].src = src;
+						_this.audios[ audio ].src = src;
 					})(_this, audio);
 				}
 			}

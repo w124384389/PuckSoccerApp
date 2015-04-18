@@ -1,15 +1,16 @@
+/* global window */
+/* global draw */
 define (function () {
+	var proto, animationFrame = null, initialized = false, myEngine, then = null, now = null;	
 
-	var animationFrame = null, initialized = false, myEngine, then = null, now = null;	
-
-	function makeNewEngine () {
+	function makeNewEngine() {
 		if (myEngine == null) {
 			myEngine = Object.create(proto);
 		}
 		return myEngine;
- 	}
+	}
 
- 	function timeStamp() {
+	function timeStamp() {
 		return window.performance && window.performance.now ? window.performance.now() : Date.now();
 	}
 
@@ -33,40 +34,40 @@ define (function () {
 		draw();
 	}
 
-	function update (deltaTime) {}
+	function update(deltaTime) {}
 
-	function render () {}
+	function render() {}
 
- 	function frame () {
- 		animationFrame = window.requestAnimationFrame(frame);	
- 		setDeltaTime();
- 		update(myEngine.deltaTime);	
- 		render();
- 	}
+	function frame() {
+		animationFrame = window.requestAnimationFrame(frame);	
+		setDeltaTime();
+		update(myEngine.deltaTime);	
+		render();
+	}
 
- 	function setDeltaTime () {
- 		now = timeStamp();
-        myEngine.deltaTime = (now - then) / 1000; // seconds since last frame
-        then = now;
- 	}
+	function setDeltaTime () {
+		now = timeStamp();
+		myEngine.deltaTime = (now - then) / 1000; // seconds since last frame
+		then = now;
+	}
 
- 	// TODO: make the security mode for all the methods, so the player can not overwrite them.
- 	var proto = {
- 		fps: 60,
- 		deltaTime: 0,
- 		init: function (updateMethod, drawMethod) {
- 			update = updateMethod;
- 			render = drawMethod;
- 			initialized = true;
- 		},
- 		pause: function () {
- 			window.cancelAnimationFrame(animationFrame);
- 		},
- 		play: function () {
- 			then = Date.now();
+	// TODO: make the security mode for all the methods, so the player can not overwrite them.
+	proto = {
+		fps: 60,
+		deltaTime: 0,
+		init: function (updateMethod, drawMethod) {
+			update = updateMethod;
+			render = drawMethod;
+			initialized = true;
+		},
+		pause: function () {
+			window.cancelAnimationFrame(animationFrame);
+		},
+		play: function () {
+			then = Date.now();
 			frame();
- 		}
- 	};
+		}
+	};
 
 	return makeNewEngine();
 });

@@ -1,18 +1,17 @@
-define(["structures/puck", "structures/vector2", "settings", "structures/player", "structures/formation", "structures/ball", "core/asset_loader", "core/audio_center"],
+define([ "structures/puck", "structures/vector2", "settings", "structures/player", "structures/formation", "structures/ball", "core/asset_loader", "core/audio_center" ],
 	function (Puck, Vector2, Settings, Player, Formation, Ball, AssetLoader, AudioCenter) {
-	
-	var players = [], mouseDown = false, mouseUp = false, mouseX, mouseY, canv, mag, inputPaused = false,
+	var i, proto, players = [], mouseDown = false, mouseUp = false, mouseX, mouseY, canv, mag, inputPaused = false,
 		playerOneTurn = true, turnTimer, timerValue = 0,
 		minIndex = 0, maxIndex = 10,
 		puckSelected = -1, selectedPos = Vector2.new(), selectedSize = 0;
 
-	function makeNewMatch () {
+	function makeNewMatch() {
 		var match = Object.create(proto);
 		match.distanceSelected = Vector2.new();
 		return match;
 	}
 	
-	var proto = {
+	proto = {
 		getInputPaused: function () {
 			return inputPaused;
 		},
@@ -31,7 +30,9 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 			}
 		},
 		startTurn: function (playerOne) {
-			timerValue = Settings.turnCooldown, that = this;
+			var that = this;
+			
+			timerValue = Settings.turnCooldown;
 			playerOneTurn = playerOne;
 			turnTimer = setInterval((function() {
 				return function () {
@@ -45,7 +46,7 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 			}()), 1000);
 		},
 		init: function(canvas) {
-			Formation.init(Settings.fieldWidth/2.0, Settings.fieldHeight);
+			Formation.init(Settings.fieldWidth / 2.0, Settings.fieldHeight);
 			var i, that = this;
 			// Creates pucks for Player1
 			for (i = 0; i < 5; i += 1) {
@@ -80,9 +81,9 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 				mouseX = e.pageX;
 				mouseY = e.pageY;
 				// Get the distance vector if selected puck
-				if (puckSelected != -1) {
-					that.distanceSelected.x = that.pucks[puckSelected].getCenterX() - mouseX;
-					that.distanceSelected.y = that.pucks[puckSelected].getCenterY() - mouseY;
+				if (puckSelected !== -1) {
+					that.distanceSelected.x = that.pucks[ puckSelected ].getCenterX() - mouseX;
+					that.distanceSelected.y = that.pucks[ puckSelected ].getCenterY() - mouseY;
 				}
 			});
 
@@ -93,11 +94,11 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 			// Else execute the input normally
 			if (inputPaused) {
 				for (i = 0; i < this.pucks.length; i += 1) {
-					if (this.pucks[i].velocity.magnitude() > 0.05) {
+					if (this.pucks[ i ].velocity.magnitude() > 0.05) {
 						break;
 					}
 				}
-				if (i == 11) {
+				if (i === 11) {
 					inputPaused = false;
 					this.endTurn(true, true);
 				}
@@ -113,22 +114,23 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 
 					for (i = minIndex; i < maxIndex; i += 1) {
 						// Check if the corresponding player hit one puck
-						if (Vector2.new(this.pucks[i].getCenterX() - mouseX, this.pucks[i].getCenterY() - mouseY).magnitude() < this.pucks[i].radius + this.pucks[10].radius) {
+						if (Vector2.new(this.pucks[i].getCenterX() - mouseX, this.pucks[ i ].getCenterY() - mouseY).magnitude() <
+							this.pucks[ i ].radius + this.pucks[ 10 ].radius) {
 							puckSelected = i;
 							mouseDown = false;
-							this.distanceSelected.x = this.pucks[puckSelected].getCenterX() - mouseX;
-							this.distanceSelected.y = this.pucks[puckSelected].getCenterY() - mouseY;
+							this.distanceSelected.x = this.pucks[ puckSelected ].getCenterX() - mouseX;
+							this.distanceSelected.y = this.pucks[ puckSelected ].getCenterY() - mouseY;
 							// Draw the 
 							break;
 						}
 					}
-				} else if (mouseUp && puckSelected != -1) {
+				} else if (mouseUp && puckSelected !== -1) {
 					AudioCenter.playSfx("puck_whoosh");
 
-					this.pucks[puckSelected].velocity =
-						Vector2.new(this.pucks[puckSelected].getCenterX() - mouseX, this.pucks[puckSelected].getCenterY() - mouseY);
-					mag = this.pucks[puckSelected].velocity.magnitude()/Settings.maxDirectionalSize;
-					this.pucks[puckSelected].velocity.normalize().multiplyMe((Math.abs(mag) > 0.5 ? 1 : mag*2) * Settings.pullStrength);
+					this.pucks[ puckSelected ].velocity =
+						Vector2.new(this.pucks[ puckSelected ].getCenterX() - mouseX, this.pucks[ puckSelected ].getCenterY() - mouseY);
+					mag = this.pucks[ puckSelected ].velocity.magnitude() / Settings.maxDirectionalSize;
+					this.pucks[ puckSelected ].velocity.normalize().multiplyMe((Math.abs(mag) > 0.5 ? 1 : mag*2) * Settings.pullStrength);
 					puckSelected = -1;
 					inputPaused = true;
 					this.endTurn(false, false);
@@ -136,44 +138,44 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 			}
 		},
 		getSelectedPuck: function () {
-			return puckSelected != -1 ? this.pucks[puckSelected] : null;
+			return puckSelected != -1 ? this.pucks[ puckSelected ] : null;
 		},
 		reset: function () {
 			// Positions Player1 pucks
 			for (i = 0; i < 5; i += 1) {
-				this.pucks[i].velocity = Vector2.new();
-				this.pucks[i].position = Formation.getFormation(this.getPlayer(0).formation, true)[i];
+				this.pucks[ i ].velocity = Vector2.new();
+				this.pucks[ i ].position = Formation.getFormation(this.getPlayer(0).formation, true)[ i ];
 			}
 			// Positions Player2 pucks
 			for (i = 5; i < 10; i += 1) {
-				this.pucks[i].velocity = Vector2.new();
-				this.pucks[i].position = Formation.getFormation(this.getPlayer(1).formation, false)[i-5];
+				this.pucks[ i ].velocity = Vector2.new();
+				this.pucks[ i ].position = Formation.getFormation(this.getPlayer(1).formation, false)[ i - 5 ];
 			}
 			// Positions the ball
-			this.pucks[10].velocity = Vector2.new();
-			this.pucks[10].position = Vector2.new(Settings.fieldWidth/2 - this.pucks[10].radius + Settings.fieldOffsetX,
-				Settings.fieldHeight/2 - this.pucks[10].radius + Settings.fieldOffsetY);
+			this.pucks[ 10 ].velocity = Vector2.new();
+			this.pucks[ 10 ].position = Vector2.new(Settings.fieldWidth / 2 - this.pucks[ 10 ].radius + Settings.fieldOffsetX,
+				Settings.fieldHeight / 2 - this.pucks[ 10 ].radius + Settings.fieldOffsetY);
 
 		},
 		getPlayer: function (id) {
-			return players[id];
+			return players[ id ];
 		},
 		drawSelectedPuck: function (context) {
 			if (this.getSelectedPuck() != null) {
-				selectedSize = (this.getSelectedPuck().radius + 30) * this.distanceSelected.magnitude()/this.getSelectedPuck().radius;
+				selectedSize = (this.getSelectedPuck().radius + 30) * this.distanceSelected.magnitude() / this.getSelectedPuck().radius;
 				selectedSize = selectedSize > Settings.maxDirectionalSize ? Settings.maxDirectionalSize : selectedSize;
-				selectedPos.x = this.getSelectedPuck().getCenterX() - selectedSize/2;
-				selectedPos.y = this.getSelectedPuck().getCenterY() - selectedSize/2;
+				selectedPos.x = this.getSelectedPuck().getCenterX() - selectedSize / 2;
+				selectedPos.y = this.getSelectedPuck().getCenterY() - selectedSize / 2;
 
-				var translateX = selectedPos.x+(selectedSize/2);
-				var translateY = selectedPos.y+(selectedSize/2);
+				var translateX = selectedPos.x + (selectedSize / 2);
+				var translateY = selectedPos.y + (selectedSize / 2);
 
 				context.save();
-				context.translate(translateX,translateY);
+				context.translate(translateX, translateY);
 				context.rotate(this.distanceSelected.angle(true));
-				context.translate(-translateX,-translateY);
+				context.translate(-translateX, -translateY);
 				// Draw the direction circle/arrow
-				context.drawImage(AssetLoader.imgs["dir_circle"], selectedPos.x, selectedPos.y, selectedSize, selectedSize);
+				context.drawImage(AssetLoader.imgs[ "dir_circle" ], selectedPos.x, selectedPos.y, selectedSize, selectedSize);
 				context.restore();
 			}
 		},
@@ -182,6 +184,15 @@ define(["structures/puck", "structures/vector2", "settings", "structures/player"
 		},
 		getCurrentPlayerId: function () {
 			return playerOneTurn ? 0 : 1; 
+		},
+		delete: function () {
+			for (i = 0; i < 11; i += 1) {
+				delete this.pucks[ i ];
+			}
+			this.pucks = [];
+			delete players[0];
+			delete players[1];
+			players = [];
 		}
 	};
 
